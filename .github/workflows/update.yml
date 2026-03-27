@@ -2,32 +2,31 @@ name: Update Instagram Followers
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/10 * * * *"  # toutes les 10 minutes
   workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get followers
-        run: |
-          curl -s "https://i.instagram.com/api/v1/users/web_profile_info/?username=veterinaires.lannion.sevetys" \
-          -H "User-Agent: Mozilla/5.0" \
-          > data.json
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
-      - name: Extract followers
-        run: |
-          followers=$(cat data.json | grep -o '"edge_followed_by":{"count":[0-9]*' | grep -o '[0-9]*')
-          echo "{ \"followers\": $followers }" > followers.json
+      - name: Install requests
+        run: pip install requests
 
-      - name: Commit
+      - name: Run script
+        run: python followers_update.py
+
+      - name: Commit JSON
         run: |
           git config --global user.name "bot"
           git config --global user.email "bot@example.com"
