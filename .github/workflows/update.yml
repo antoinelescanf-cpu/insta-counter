@@ -2,7 +2,7 @@ name: Update Instagram Followers
 
 on:
   schedule:
-    - cron: "*/10 * * * *"  # toutes les 10 minutes
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
@@ -32,4 +33,4 @@ jobs:
           git config --global user.email "bot@example.com"
           git add followers.json
           git commit -m "update followers" || echo "no change"
-          git push
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
