@@ -1,7 +1,7 @@
 import requests
 import json
 
-USERNAME = "veterinaires.lannion.sevetys"
+USERNAME = "antoine.nc"
 JSON_FILE = "followers.json"
 URL = f"https://www.instagram.com/{USERNAME}/?__a=1&__d=dis"
 
